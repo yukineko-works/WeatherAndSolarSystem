@@ -13,6 +13,7 @@ namespace yukineko.WeatherAndSolarSystem
         Snowy = 3
     }
 
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WeatherSystem : UdonSharpBehaviour
     {
         [SerializeField] private uint _randomSeed = 0;
@@ -22,10 +23,10 @@ namespace yukineko.WeatherAndSolarSystem
         [SerializeField] private int _skyboxCloudyCloudCoverage = 80;
         [SerializeField] private int _skyboxRainyCloudCoverage = 100;
 
-        [SerializeField] private GameObject _weatherAssetContainerSunny;
-        [SerializeField] private GameObject _weatherAssetContainerCloudy;
-        [SerializeField] private GameObject _weatherAssetContainerRainy;
-        [SerializeField] private GameObject _weatherAssetContainerSnowy;
+        [SerializeField] private GameObject[] _weatherAssetContainerSunny = new GameObject[0];
+        [SerializeField] private GameObject[] _weatherAssetContainerCloudy = new GameObject[0];
+        [SerializeField] private GameObject[] _weatherAssetContainerRainy = new GameObject[0];
+        [SerializeField] private GameObject[] _weatherAssetContainerSnowy = new GameObject[0];
 
         private bool _isInitialized = false;
         private UdonBehaviour[] _weatherUpdateCallbacks = new UdonBehaviour[0];
@@ -46,11 +47,6 @@ namespace yukineko.WeatherAndSolarSystem
                 return;
             }
 
-            if (_weatherAssetContainerSunny == null || _weatherAssetContainerCloudy == null || _weatherAssetContainerRainy == null || _weatherAssetContainerSnowy == null)
-            {
-                Debug.LogWarning("設定されていない天候アセットのコンテナがあります");
-            }
-
             _isInitialized = true;
             UpdateWeather();
         }
@@ -64,10 +60,29 @@ namespace yukineko.WeatherAndSolarSystem
             // var elapsedSeconds = currentTime.ToUnixTimeSeconds() % (60 * _weatherChangeSpanMinutes); // U#だとlong型に対して剰余演算子が使えない
             var weather = GetWeather(currentTime.AddSeconds(-elapsedSeconds));
 
-            if (_weatherAssetContainerSunny != null) _weatherAssetContainerSunny.SetActive(weather == Weather.Sunny);
-            if (_weatherAssetContainerCloudy != null) _weatherAssetContainerCloudy.SetActive(weather == Weather.Cloudy);
-            if (_weatherAssetContainerRainy != null) _weatherAssetContainerRainy.SetActive(weather == Weather.Rainy);
-            if (_weatherAssetContainerSnowy != null) _weatherAssetContainerSnowy.SetActive(weather == Weather.Snowy);
+            foreach (var obj in _weatherAssetContainerSunny)
+            {
+                if (obj == null) continue;
+                obj.SetActive(weather == Weather.Sunny);
+            }
+
+            foreach (var obj in _weatherAssetContainerCloudy)
+            {
+                if (obj == null) continue;
+                obj.SetActive(weather == Weather.Cloudy);
+            }
+
+            foreach (var obj in _weatherAssetContainerRainy)
+            {
+                if (obj == null) continue;
+                obj.SetActive(weather == Weather.Rainy);
+            }
+
+            foreach (var obj in _weatherAssetContainerSnowy)
+            {
+                if (obj == null) continue;
+                obj.SetActive(weather == Weather.Snowy);
+            }
 
             switch(weather)
             {
@@ -184,5 +199,4 @@ namespace yukineko.WeatherAndSolarSystem
             }
         }
     }
-
 }
