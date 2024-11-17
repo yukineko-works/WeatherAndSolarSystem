@@ -7,6 +7,7 @@ using VRC.Udon;
 
 namespace yukineko.WeatherAndSolarSystem
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class DayCycleSystem : UdonSharpBehaviour
     {
         [SerializeField] private float _latitude = 35.68f;
@@ -153,6 +154,7 @@ namespace yukineko.WeatherAndSolarSystem
                 VRCShader.SetGlobalMatrix(_shaderIdUdonMoonSpaceMatrix, new Matrix4x4(-(moonLightRotation * Vector3.forward), -(moonLightRotation * Vector3.up), -(moonLightRotation * Vector3.right), Vector4.zero).transpose);
             }
 
+#if UNITY_EDITOR
             if (_debugMode)
             {
                 SendCustomEventDelayedFrames(nameof(UpdateLightAngle), 1);
@@ -161,6 +163,9 @@ namespace yukineko.WeatherAndSolarSystem
             {
                 SendCustomEventDelayedSeconds(nameof(UpdateLightAngle), _updateFrequency);
             }
+#else
+            SendCustomEventDelayedSeconds(nameof(UpdateLightAngle), _updateFrequency);
+#endif
         }
     }
 }
