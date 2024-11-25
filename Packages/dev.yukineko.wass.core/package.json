@@ -5,7 +5,7 @@
   "description": "Weather and Solar system core",
   "gitDependencies": {},
   "vpmDependencies": {
-    "com.vrchat.worlds": "3.7.3"
+    "com.vrchat.worlds": ">=3.7.3"
   },
   "author": {
     "name": "yukineko",
