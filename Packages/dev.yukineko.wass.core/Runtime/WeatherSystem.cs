@@ -51,13 +51,19 @@ namespace yukineko.WeatherAndSolarSystem
             UpdateWeather();
         }
 
+        public int GetElapsedSeconds(DateTimeOffset currentTime = default)
+        {
+            if (currentTime == default) currentTime = DateTimeOffset.UtcNow;
+            var x = currentTime.ToUnixTimeSeconds();
+            var y = 60 * _weatherChangeSpanMinutes;
+            return (int)(x - y * (x / y));
+            // var elapsedSeconds = currentTime.ToUnixTimeSeconds() % (60 * _weatherChangeSpanMinutes); // U#だとlong型に対して剰余演算子が使えない
+        }
+
         public void UpdateWeather()
         {
             var currentTime = DateTimeOffset.UtcNow;
-            var x = currentTime.ToUnixTimeSeconds();
-            var y = 60 * _weatherChangeSpanMinutes;
-            var elapsedSeconds = x - y * (x / y);
-            // var elapsedSeconds = currentTime.ToUnixTimeSeconds() % (60 * _weatherChangeSpanMinutes); // U#だとlong型に対して剰余演算子が使えない
+            var elapsedSeconds = GetElapsedSeconds(currentTime);
             var weather = GetWeather(currentTime.AddSeconds(-elapsedSeconds));
 
             foreach (var obj in _weatherAssetContainerSunny)
