@@ -122,7 +122,7 @@ namespace yukineko.WeatherAndSolarSystem
             if (r >= p)
             {
                 // 50%の確率で曇り
-                if (Rand(time, _randomSeed + 256) < 0.5f) return Weather.Cloudy;
+                if (Rand(time, _randomSeed + 1024) < 0.5f) return Weather.Cloudy;
 
                 // 1~2月は確定で雪
                 if (month <= 2) return Weather.Snowy;
@@ -130,7 +130,7 @@ namespace yukineko.WeatherAndSolarSystem
                 if (month == 12 || month == 3)
                 {
                     var mp = time.Day / DateTime.DaysInMonth(time.Year, time.Month);
-                    var sr = Rand(time, _randomSeed + 512);
+                    var sr = Rand(time, _randomSeed + 2048);
 
                     // 12月なら月末に向かうにつれて雪が降る確率が上がる
                     // 3月なら月末に向かうにつれて雪が降る確率が下がる
@@ -145,34 +145,32 @@ namespace yukineko.WeatherAndSolarSystem
         }
 
         /// <summary>
-        /// 時間ベースで乱数生成を行う
+        /// 時間ベースで簡易乱数生成を行う.
+        /// 精度は分単位.
         /// </summary>
         /// <param name="time">乱数生成に使用する日時</param>
-        /// <param name="randomSeed">シード値 (未指定の場合は `_randomSeed` が使用される)</param>
+        /// <param name="seed">シード値</param>
         /// <returns></returns>
-        private float Rand(DateTimeOffset time, uint randomSeed)
+        private double Rand(DateTimeOffset time, uint seed)
         {
-            return Rand(time.ToUnixTimeSeconds(), randomSeed);
+            return Rand((uint)(time.ToUnixTimeSeconds() / 60), seed);
         }
 
         /// <summary>
-        /// 第1引数の値を元に乱数生成を行う
+        /// 第1引数の値を元に簡易乱数生成を行う
         /// </summary>
-        /// <param name="unix">乱数生成に使用する数値</param>
-        /// <param name="randomSeed">シード値 (未指定の場合は `_randomSeed` が使用される)</param>
+        /// <param name="rand">乱数生成に使用する数値</param>
+        /// <param name="seed">シード値</param>
         /// <returns></returns>
-        private float Rand(long unix, uint randomSeed)
+        private double Rand(uint rand, uint seed)
         {
-            var mlunix = (uint)(unix / 60 & 0xFFFF);
-            var seed = randomSeed & 0xFFFF;
-            var combinedSeed = (mlunix << 16) | seed;
+            rand ^= 0x9e3779b9;
+            rand += seed + (rand << 6) + (rand >> 2);
+            rand ^= rand << 13;
+            rand ^= rand >> 17;
+            rand ^= rand << 5;
 
-            var x = combinedSeed;
-            x ^= x << 13;
-            x ^= x >> 17;
-            x ^= x << 5;
-
-            return (x & 0xFFFF) / 65535f;
+            return (double)rand / uint.MaxValue;
         }
 
         /// <summary>
