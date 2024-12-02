@@ -29,7 +29,7 @@ namespace yukineko.WeatherAndSolarSystem
         [SerializeField] private GameObject[] _weatherAssetContainerSnowy = new GameObject[0];
 
         private bool _isInitialized = false;
-        private UdonBehaviour[] _weatherUpdateCallbacks = new UdonBehaviour[0];
+        private UdonSharpBehaviour[] _weatherUpdateCallbacks = new UdonSharpBehaviour[0];
 
         public int WeatherChangeSpanMinutes => _weatherChangeSpanMinutes;
 
@@ -176,16 +176,16 @@ namespace yukineko.WeatherAndSolarSystem
         }
 
         /// <summary>
-        /// 天候更新時に呼び出されるUdonBehaviourを登録する.
-        /// 天候更新時には登録されたUdonBehaviourの `WeatherUpdated` メソッドが呼び出される.
+        /// 天候更新時に呼び出されるUdonSharpBehaviourを登録する.
+        /// 天候更新時には登録されたUdonSharpBehaviourの `WeatherUpdated` メソッドが呼び出される.
         /// </summary>
-        /// <param name="callback">呼び出すUdonBehaviour</param>
-        public void RegisterWeatherUpdateCallback(UdonBehaviour callback)
+        /// <param name="callback">呼び出すUdonSharpBehaviour</param>
+        public void RegisterWeatherUpdateCallback(UdonSharpBehaviour callback)
         {
             if (callback == null) return;
 
             var length = _weatherUpdateCallbacks.Length;
-            var list = new UdonBehaviour[length + 1];
+            var list = new UdonSharpBehaviour[length + 1];
             Array.Copy(_weatherUpdateCallbacks, list, length);
             list[length] = callback;
             _weatherUpdateCallbacks = list;
