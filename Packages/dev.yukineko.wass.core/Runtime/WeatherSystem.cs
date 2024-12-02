@@ -113,7 +113,7 @@ namespace yukineko.WeatherAndSolarSystem
             SendCustomEventDelayedSeconds(nameof(UpdateWeather), 60 * _weatherChangeSpanMinutes - elapsedSeconds + 1);
         }
 
-        private Weather GetWeather(DateTimeOffset time)
+        public Weather GetWeather(DateTimeOffset time)
         {
             var month = time.Month;
             var r = Rand(time, _randomSeed);
