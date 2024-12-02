@@ -680,7 +680,7 @@ MonoBehaviour:
       Data: 40|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: VRC.Udon.UdonBehaviour[], VRC.Udon
+      Data: UdonSharp.UdonSharpBehaviour[], UdonSharp.Runtime
     - Name: 
       Entry: 8
       Data: 
