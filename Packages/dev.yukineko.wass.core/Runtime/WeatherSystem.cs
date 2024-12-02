@@ -180,7 +180,8 @@ namespace yukineko.WeatherAndSolarSystem
         /// 天候更新時には登録されたUdonSharpBehaviourの `WeatherUpdated` メソッドが呼び出される.
         /// </summary>
         /// <param name="callback">呼び出すUdonSharpBehaviour</param>
-        public void RegisterWeatherUpdateCallback(UdonSharpBehaviour callback)
+        /// <param name="callImmediately">登録時に初期化が完了していた場合に、即時 `WeatherUpdated` メソッドを呼び出す</param>
+        public void RegisterWeatherUpdateCallback(UdonSharpBehaviour callback, bool callImmediately = true)
         {
             if (callback == null) return;
 
@@ -189,6 +190,8 @@ namespace yukineko.WeatherAndSolarSystem
             Array.Copy(_weatherUpdateCallbacks, list, length);
             list[length] = callback;
             _weatherUpdateCallbacks = list;
+
+            if (_isInitialized && callImmediately) callback.SendCustomEvent("WeatherUpdated");
         }
 
         private void SetCloudCoverage(float value)
