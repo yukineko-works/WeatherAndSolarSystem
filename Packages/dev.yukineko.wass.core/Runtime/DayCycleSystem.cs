@@ -108,7 +108,15 @@ namespace yukineko.WeatherAndSolarSystem
         public void UpdateLightAngle()
         {
             var current = DateTime.UtcNow.AddHours(_timezone);
-            var T = current.Hour + (current.Minute / 60f) + (current.Second / 3600f) + (current.Millisecond / 3600000f) + ((_longitude - 135f) / 15f) + _e + _debugTimeValue;
+            var T = current.Hour + (current.Minute / 60f) + (current.Second / 3600f) + (current.Millisecond / 3600000f) + ((_longitude - 135f) / 15f) + _e;
+
+#if UNITY_EDITOR
+            if (_debugMode)
+            {
+                T += _debugTimeValue;
+            }
+#endif
+
             var t = ((15f * T) - 180f) * Mathf.Deg2Rad;
             var h = Math.Asin((Math.Sin(_phi) * Math.Sin(_delta)) + (Math.Cos(_phi) * Math.Cos(_delta) * Math.Cos(t)));
             var sinA = Math.Cos(_delta) * Math.Sin(t) / Math.Cos(h);
