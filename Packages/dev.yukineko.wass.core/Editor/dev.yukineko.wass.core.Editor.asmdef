@@ -1,18 +1,22 @@
 {
-  "name": "dev.yukineko.wass.core.Editor",
-  "references": [
-    "VRC.SDK3",
-    "VRC.SDK3.Editor",
-    "VRC.SDKBase",
-    "VRC.SDKBase.Editor",
-    "dev.yukineko.wass.core"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "autoReferenced": true,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "defineConstraints": [],
-  "optionalUnityReferences": []
+    "name": "dev.yukineko.wass.core.Editor",
+    "rootNamespace": "",
+    "references": [
+        "VRC.SDK3",
+        "VRC.SDK3.Editor",
+        "VRC.SDKBase",
+        "VRC.SDKBase.Editor",
+        "dev.yukineko.wass.core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
