@@ -12,17 +12,17 @@
   },
   "locked": {
     "com.vrchat.worlds": {
-      "version": "3.7.4",
+      "version": "3.7.6",
       "dependencies": {
-        "com.vrchat.base": "3.7.4"
+        "com.vrchat.base": "3.7.6"
       }
     },
     "com.vrchat.base": {
-      "version": "3.7.4",
+      "version": "3.7.6",
       "dependencies": {}
     },
     "dev.yukineko.dev-utils": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "dependencies": {
         "com.vrchat.worlds": ">=3.7.1"
       }
