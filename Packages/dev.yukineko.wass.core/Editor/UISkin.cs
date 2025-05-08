@@ -79,14 +79,16 @@ namespace yukineko.WeatherAndSolarSystem.Editor
             return _bgStyle;
         }
 
-        public static void InfoBox(string message, MessageType type = MessageType.Info, bool margin = true)
+        public static void InfoBox(string message, MessageType type = MessageType.Info, bool margin = true, bool indent = true)
         {
             if (margin)
             {
                 EditorGUILayout.Space();
             }
 
+            if (indent) EditorGUI.indentLevel++;
             EditorGUILayout.HelpBox(message, type);
+            if (indent) EditorGUI.indentLevel--;
 
             if (margin)
             {
