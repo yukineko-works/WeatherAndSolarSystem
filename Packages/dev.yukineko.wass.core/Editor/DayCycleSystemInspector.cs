@@ -38,6 +38,18 @@ namespace yukineko.WeatherAndSolarSystem.Editor
             {
                 YNUI.InfoBox("DirectionalLight (太陽) が設定されていません", MessageType.Error);
             }
+            else if (sunLight.objectReferenceValue is Light light && light != RenderSettings.sun)
+            {
+                YNUI.InfoBox("EnvironmentのSunSourceが未設定か、DirectionalLight (太陽) とは異なるライトが設定されています。\n現在の設定では正しく動作しない可能性があります。", MessageType.Warning);
+                using (new EditorGUI.IndentLevelScope())
+                {
+                    if (GUI.Button(EditorGUI.IndentedRect(EditorGUILayout.GetControlRect()), "現在のライトをSunSourceに設定する"))
+                    {
+                        RenderSettings.sun = light;
+                    }
+                }
+                EditorGUILayout.Space();
+            }
 
             var moonLight = serializedObject.FindProperty("_moonLight");
             EditorGUILayout.PropertyField(moonLight, new GUIContent("DirectionalLight (月)"));
