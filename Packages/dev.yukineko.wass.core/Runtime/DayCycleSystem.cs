@@ -38,10 +38,10 @@ namespace yukineko.WeatherAndSolarSystem
         [SerializeField] private bool _debugMode = false;
         [SerializeField] private float _debugTimeValue = 0f;
 
-        private readonly int _shaderIdUdonLightRotation = VRCShader.PropertyToID("_UdonLightRotation");
-        private readonly int _shaderIdUdonLocalLightRotation = VRCShader.PropertyToID("_UdonLocalLightRotation");
-        private readonly int _shaderIdUdonMoonDir = VRCShader.PropertyToID("_UdonMoonDir");
-        private readonly int _shaderIdUdonMoonSpaceMatrix = VRCShader.PropertyToID("_UdonMoonSpaceMatrix");
+        private int _shaderIdUdonLightRotation;
+        private int _shaderIdUdonLocalLightRotation;
+        private int _shaderIdUdonMoonDir;
+        private int _shaderIdUdonMoonSpaceMatrix;
 
         private float _delta = 0;
         private float _e = 0;
@@ -89,19 +89,24 @@ namespace yukineko.WeatherAndSolarSystem
         private void Initialize()
         {
             if (_isInitialized) return;
+
             var angle = 2f * Math.PI / (DateTime.IsLeapYear(DateTime.UtcNow.Year) ? 366 : 365) * (DateTime.UtcNow.DayOfYear + 0.5f);
             _delta = (float)((0.33281f - (22.984f * Math.Cos(angle)) - (0.3499f * Math.Cos(2 * angle)) - (0.1398f * Math.Cos(3 * angle)) + (3.7872f * Math.Sin(angle)) + (0.0325f * Math.Sin(2 * angle)) + (0.07187f * Math.Sin(3 * angle))) * Mathf.Deg2Rad);
             _e = (float)((0.0072f * Math.Cos(angle)) - (0.0528f * Math.Cos(2 * angle)) - (0.0012f * Math.Cos(3 * angle)) - (0.1229f * Math.Sin(angle)) - (0.1565f * Math.Sin(2 * angle)) - (0.0041f * Math.Sin(3 * angle)));
             _phi = _latitude * Mathf.Deg2Rad;
             _t = (float)(Math.Acos(-Math.Tan(_delta) * Math.Tan(_phi)) * Mathf.Rad2Deg);
-            _isInitialized = true;
             _isUsingPhysicalSkybox = RenderSettings.skybox != null && RenderSettings.skybox.shader.name == "CaminoVR/Skybox";
+            _shaderIdUdonLightRotation = VRCShader.PropertyToID("_UdonLightRotation");
+            _shaderIdUdonLocalLightRotation = VRCShader.PropertyToID("_UdonLocalLightRotation");
+            _shaderIdUdonMoonDir = VRCShader.PropertyToID("_UdonMoonDir");
+            _shaderIdUdonMoonSpaceMatrix = VRCShader.PropertyToID("_UdonMoonSpaceMatrix");
 
             if (_isUsingPhysicalSkybox)
             {
                 RenderSettings.skybox.SetFloat("_MoonPhase", MoonPhase);
             }
 
+            _isInitialized = true;
             UpdateLightAngle();
         }
 
@@ -154,7 +159,7 @@ namespace yukineko.WeatherAndSolarSystem
                 }
             }
 
-            if (_isUsingPhysicalSkybox)
+            if (_isUsingPhysicalSkybox && _isInitialized)
             {
                 VRCShader.SetGlobalFloat(_shaderIdUdonLightRotation, A * Mathf.Deg2Rad);
                 VRCShader.SetGlobalFloat(_shaderIdUdonLocalLightRotation, height);
